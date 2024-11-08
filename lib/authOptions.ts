@@ -1,9 +1,24 @@
 // src/lib/authOptions.ts
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./prisma";
 import bcrypt from "bcryptjs";
+
+// Define custom types for token and session user
+interface CustomToken {
+  id?: string;
+  username?: string;
+  email?: string;
+  isPremium?: boolean;
+}
+
+interface CustomSessionUser extends User {
+  id: string;
+  username: string;
+  email: string;
+  isPremium: boolean;
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -14,21 +29,11 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "Enter your Email",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Enter your Password",
-        },
+        email: { label: "Email", type: "text", placeholder: "Enter your Email" },
+        password: { label: "Password", type: "password", placeholder: "Enter your Password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
         try {
           const user = await prisma.user.findUnique({
@@ -36,10 +41,7 @@ export const authOptions: NextAuthOptions = {
           });
           if (!user) throw new Error("No user found");
 
-          const isValidPassword = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
+          const isValidPassword = await bcrypt.compare(credentials.password, user.password);
           if (!isValidPassword) throw new Error("Invalid password.");
 
           return user;
@@ -53,10 +55,14 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ session, token }) {
+      // Cast session.user to CustomSessionUser type
+      const user = session.user as CustomSessionUser;
+
       if (token?.sub) {
-        session.user.id = token.sub;
-        session.user.username = token.username;
-        session.user.isPremium = token.isPremium;
+        user.id = token.sub as string;
+        user.username = (token as CustomToken).username ?? "";
+        user.email = (token as CustomToken).email ?? "";
+        user.isPremium = (token as CustomToken).isPremium ?? false;
       }
       return session;
     },
@@ -67,6 +73,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.username = user.username;
+        token.email = user.email;
         token.isPremium = user.isPremium;
       }
       return token;
@@ -84,8 +91,7 @@ export const authOptions: NextAuthOptions = {
           const newUser = await prisma.user.create({
             data: {
               email: profile.email,
-              username:
-                profile.name || `user_${Math.random().toString(36).slice(2, 8)}`,
+              username: profile.name || `user_${Math.random().toString(36).slice(2, 8)}`,
               isPremium: false,
               password: hashedPassword,
             },
@@ -93,10 +99,12 @@ export const authOptions: NextAuthOptions = {
 
           user.id = newUser.id;
           user.username = newUser.username;
+          user.email = newUser.email;
           user.isPremium = newUser.isPremium;
         } else {
           user.id = existingUser.id;
           user.username = existingUser.username;
+          user.email = existingUser.email;
           user.isPremium = existingUser.isPremium;
         }
       }
