@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import prisma from "../../../../lib/prisma";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../../../lib/authOptions";
 import mime from "mime-types";
 
 // Configure AWS S3 Client
