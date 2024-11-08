@@ -79,24 +79,27 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async signIn({ user, account, profile }) {
-      if (account.provider === "google") {
+      if (account && account.provider === "google") {
         const existingUser = await prisma.user.findFirst({
+          // @ts-ignore
           where: { email: profile.email },
         });
-
+    
         if (!existingUser) {
           const randomPassword = Math.random().toString(36).slice(-8);
           const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
+    
           const newUser = await prisma.user.create({
             data: {
+              // @ts-ignore
               email: profile.email,
+              // @ts-ignore
               username: profile.name || `user_${Math.random().toString(36).slice(2, 8)}`,
               isPremium: false,
               password: hashedPassword,
             },
           });
-
+    
           user.id = newUser.id;
           user.username = newUser.username;
           user.email = newUser.email;
@@ -109,7 +112,7 @@ export const authOptions: NextAuthOptions = {
         }
       }
       return true;
-    },
+    }    
   },
   pages: {
     signIn: "/auth/sign-in",

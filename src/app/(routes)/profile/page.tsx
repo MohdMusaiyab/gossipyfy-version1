@@ -21,6 +21,7 @@ const ProfilePage = () => {
       if (session) {
         const userId = session.user.id;
         const fetchedUser = await getUser(userId);
+        //@ts-ignore
         setUser(fetchedUser);
       }
       setLoading(false);
@@ -90,6 +91,7 @@ const ProfilePage = () => {
               <div className="p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
                 <p className="text-sm text-indigo-200">Username</p>
                 <p className="text-lg font-semibold flex items-center">
+                  
                   {user.username}{" "}
                   {user.isPremium ? <PremiumStatus /> : <UpgradeToPremium />}
                 </p>

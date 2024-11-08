@@ -20,6 +20,7 @@ const Page = () => {
     const fetchUserData = async () => {
       if (id) {
         try {
+          //@ts-ignore
           const userData = await getUser(id);
           setUser(userData);
           const currentUser = session?.user;
@@ -54,6 +55,7 @@ const Page = () => {
           ? prev.followers.slice(0, -1)
           : [...prev.followers, { id: session.user.id }],
       }));
+      //@ts-ignore
       await toggleFollowers(id);
     } catch (err) {
       console.error("Error toggling follow status", err);

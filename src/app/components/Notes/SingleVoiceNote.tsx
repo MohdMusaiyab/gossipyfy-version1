@@ -56,7 +56,7 @@ const SingleVoiceNote = ({ noteId }) => {
       }
       setHasLiked((prev) => !prev);
       setLikeCount((prev) => (hasLiked ? prev - 1 : prev + 1));
-      await toggleLike(noteId);
+      await toggleLike(noteId,session?.user?.id);
     } catch (err) {
       console.error("Error toggling like", err);
       setError(err.message);

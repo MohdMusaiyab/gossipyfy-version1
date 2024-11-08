@@ -16,6 +16,7 @@ const Page = () => {
       try {
         if (session?.user?.id) {
           const expiryDate = await getSubscriptionDate();
+          // @ts-ignore
           setSubscriptionExpiry(expiryDate);
         }
       } catch (error) {

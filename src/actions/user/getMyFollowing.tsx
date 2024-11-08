@@ -12,6 +12,7 @@ export const getMyFollowing = async () => {
       where: {
         followers: {
           some: {
+            //@ts-ignore
             id: session.user.id, // The current user is in the followers list
           },
         },

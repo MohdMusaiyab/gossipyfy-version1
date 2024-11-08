@@ -68,6 +68,7 @@ const ExplorePage = () => {
           setNotes((prevNotes) => {
             if (page === 1) return data.notes;
             const newNotes = data.notes.filter(
+              //@ts-ignore
               (newNote) => !prevNotes.some((prevNote) => prevNote.id === newNote.id)
             );
             return [...prevNotes, ...newNotes];

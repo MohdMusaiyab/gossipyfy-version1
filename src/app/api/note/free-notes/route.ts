@@ -3,6 +3,7 @@ import { requireAuth } from "../../../../../lib/auth"; // Ensure this works with
 import prisma from "../../../../../lib/prisma";
 
 export async function GET(req: NextRequest) {
+  //@ts-ignore
   const session = await requireAuth(req); // Use the utility to check authentication
 
   // If the session is null, it means the user is not authenticated

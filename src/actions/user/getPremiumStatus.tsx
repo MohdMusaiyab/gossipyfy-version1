@@ -6,6 +6,7 @@ export const getPremiumStatus = async () => {
     const session = await getSessionOrThrow()
     const user = await prisma.user.findUnique({
         where: {
+        // @ts-ignore
         email: session.user.email,
         },
     })

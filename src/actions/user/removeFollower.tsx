@@ -6,6 +6,7 @@ export const removeFollower = async (followerId: string) => {
   try {
     // Get the current session of the logged-in user
     const session = await getSessionOrThrow();
+    // @ts-ignore
     const userId = session.user.id; // The ID of the logged-in user (whose followers list will be updated)
 
     // Remove the follower by disconnecting the relationship

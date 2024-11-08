@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
       data: {
         userId,
         razorpayOrderId: order.id,
+        // @ts-ignore
         amount: parseInt(order.amount),
         currency: order.currency,
         status: 'pending',

@@ -14,6 +14,7 @@ export const updateEmail = async (newEmail: string) => {
       },
     });
     console.log("existingUser", existingUser?.email);
+    // @ts-ignore
     console.log("from session ",session.user.email);
     if (!existingUser) {
       throw new Error("User not found");

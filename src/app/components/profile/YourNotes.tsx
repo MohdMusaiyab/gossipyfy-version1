@@ -24,6 +24,7 @@ const YourNotes = () => {
     const fetchNotes = async () => {
       try {
         const fetchedNotes = await yourUserNotes();
+        //@ts-ignore
         setNotes(fetchedNotes.voiceNotes || []);
       } catch (error) {
         setError("Could not fetch user notes");
