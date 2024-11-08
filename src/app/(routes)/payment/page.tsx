@@ -41,7 +41,7 @@ export default function PaymentPage() {
       await loadRazorpay();
 
       const { data } = await axios.post('/api/create-order', {
-        amount: 500, // Example amount in INR (in paise)
+        amount: 50, // Example amount in INR (in paise)
       });
 
       const { razorpayOrderId, amount, currency } = data;

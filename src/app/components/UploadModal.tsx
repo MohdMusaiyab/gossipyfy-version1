@@ -10,7 +10,7 @@ const UploadModal = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  
+
   const [formData, setFormData] = useState<{
     title: string;
     description: string;
@@ -20,7 +20,7 @@ const UploadModal = () => {
     title: "",
     description: "",
     language: Language.ENGLISH,
-    category: Category.MUSIC
+    category: Category.MUSIC,
   });
 
   const [file, setFile] = useState<File | null>(null);
@@ -29,7 +29,7 @@ const UploadModal = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+
     const data = new FormData();
     data.append("title", formData.title);
     data.append("description", formData.description);
@@ -42,7 +42,7 @@ const UploadModal = () => {
 
     try {
       const res = await axios.post("/api/upload", data, {
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: { "Content-Type": "multipart/form-data" },
       });
       console.log("Upload response:", res.data);
       setSuccess(true);
@@ -53,7 +53,7 @@ const UploadModal = () => {
           title: "",
           description: "",
           language: Language.ENGLISH,
-          category: Category.MUSIC
+          category: Category.MUSIC,
         });
         setFile(null);
       }, 2000);
@@ -65,7 +65,9 @@ const UploadModal = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -75,7 +77,7 @@ const UploadModal = () => {
       setFile(e.target.files[0]);
       console.log("File selected:", e.target.files[0]);
     }
-  }
+  };
 
   return (
     <>
@@ -120,7 +122,10 @@ const UploadModal = () => {
                   )}
 
                   <div className="space-y-2">
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-200">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-medium text-gray-200"
+                    >
                       Title
                     </label>
                     <input
@@ -135,7 +140,10 @@ const UploadModal = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-200">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-medium text-gray-200"
+                    >
                       Description
                     </label>
                     <input
@@ -150,7 +158,10 @@ const UploadModal = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="language" className="block text-sm font-medium text-gray-200">
+                    <label
+                      htmlFor="language"
+                      className="block text-sm font-medium text-gray-200"
+                    >
                       Language
                     </label>
                     <select
@@ -160,7 +171,7 @@ const UploadModal = () => {
                       onChange={handleChange}
                       className="w-full px-3 py-2 bg-[#33334d] border border-gray-500 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
-                      {Object.values(Language).map(lang => (
+                      {Object.values(Language).map((lang) => (
                         <option key={lang} value={lang}>
                           {lang}
                         </option>
@@ -169,7 +180,10 @@ const UploadModal = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-200">
+                    <label
+                      htmlFor="category"
+                      className="block text-sm font-medium text-gray-200"
+                    >
                       Category
                     </label>
                     <select
@@ -179,7 +193,7 @@ const UploadModal = () => {
                       onChange={handleChange}
                       className="w-full px-3 py-2 bg-[#33334d] border border-gray-500 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
-                      {Object.values(Category).map(cat => (
+                      {Object.values(Category).map((cat) => (
                         <option key={cat} value={cat}>
                           {cat}
                         </option>
@@ -188,7 +202,10 @@ const UploadModal = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="file" className="block text-sm font-medium text-gray-200">
+                    <label
+                      htmlFor="file"
+                      className="block text-sm font-medium text-gray-200"
+                    >
                       File
                     </label>
                     <input
@@ -196,6 +213,7 @@ const UploadModal = () => {
                       type="file"
                       onChange={handleFile}
                       required
+                      accept=".mp3, .wav, .ogg, .m4a, .flac, .aac, .aiff, .wma, .alac, .opus" // Common audio file extensions
                       className="w-full px-3 py-2 bg-[#33334d] border border-gray-500 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
@@ -204,7 +222,9 @@ const UploadModal = () => {
                     type="submit"
                     disabled={loading}
                     className={`w-full flex items-center justify-center px-4 py-2 rounded-lg text-white font-medium ${
-                      loading ? 'bg-purple-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'
+                      loading
+                        ? "bg-purple-400 cursor-not-allowed"
+                        : "bg-purple-600 hover:bg-purple-700"
                     } transition-colors`}
                   >
                     {loading ? (
@@ -213,7 +233,7 @@ const UploadModal = () => {
                         Uploading...
                       </>
                     ) : (
-                      'Upload'
+                      "Upload"
                     )}
                   </button>
                 </form>

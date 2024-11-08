@@ -92,8 +92,13 @@ const NotesPage = () => {
         className="relative z-10"
       >
         <motion.h1
-          className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent"
+          className="text-4xl md:text-5xl font-bold text-center mb-12  text-transparent"
           variants={itemVariants}
+          style={{
+            background: "linear-gradient(to right, #9f7aea, #667eea, #4299e1)", // purple to indigo to blue
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text", // for cross-browser support
+          }}
         >
           Notes from My Subscriptions
         </motion.h1>

@@ -25,7 +25,10 @@ const SingleVoiceNote = ({ noteId }) => {
   const [likeCount, setLikeCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [deleteStatus, setDeleteStatus] = useState({ loading: false, error: null });
+  const [deleteStatus, setDeleteStatus] = useState({
+    loading: false,
+    error: null,
+  });
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -56,7 +59,7 @@ const SingleVoiceNote = ({ noteId }) => {
       }
       setHasLiked((prev) => !prev);
       setLikeCount((prev) => (hasLiked ? prev - 1 : prev + 1));
-      await toggleLike(noteId,session?.user?.id);
+      await toggleLike(noteId, session?.user?.id);
     } catch (err) {
       console.error("Error toggling like", err);
       setError(err.message);
@@ -106,7 +109,7 @@ const SingleVoiceNote = ({ noteId }) => {
     try {
       setDeleteStatus({ loading: true, error: null });
       const result = await deleteYourComment(commentId);
-      
+
       if (result.success) {
         setComments(comments.filter((comment) => comment.id !== commentId));
       } else {
@@ -154,7 +157,17 @@ const SingleVoiceNote = ({ noteId }) => {
         <div className="bg-purple-500/5 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-purple-500/10">
           {/* Header Section */}
           <div className="space-y-6 mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1
+              style={{
+                fontSize: "1.875rem", // Equivalent to text-3xl in Tailwind
+                fontWeight: "bold",
+                background:
+                  "linear-gradient(to right, #9f7aea, #63b3ed, #9f7aea)", // purple to blue to purple
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text", // For cross-browser support
+                color: "transparent",
+              }}
+            >
               {note.title}
             </h1>
 
@@ -186,7 +199,9 @@ const SingleVoiceNote = ({ noteId }) => {
               </div>
             </div>
 
-            <p className="text-gray-300 text-lg leading-relaxed">{note.description}</p>
+            <p className="text-gray-300 text-lg leading-relaxed">
+              {note.description}
+            </p>
           </div>
 
           {/* Audio Player */}
@@ -211,7 +226,9 @@ const SingleVoiceNote = ({ noteId }) => {
                 key={index}
                 className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-5 rounded-xl border border-purple-500/20 shadow-lg"
               >
-                <span className="text-purple-300 block mb-1 text-sm">{item.label}</span>
+                <span className="text-purple-300 block mb-1 text-sm">
+                  {item.label}
+                </span>
                 <span className="text-white font-medium">{item.value}</span>
               </div>
             ))}
@@ -244,7 +261,7 @@ const SingleVoiceNote = ({ noteId }) => {
                   {deleteStatus.error}
                 </div>
               )}
-              
+
               {comments.map((comment) => (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -252,7 +269,9 @@ const SingleVoiceNote = ({ noteId }) => {
                   key={comment.id}
                   className="bg-purple-500/5 rounded-xl p-5 border border-purple-500/10 shadow-lg relative group"
                 >
-                  <p className="text-white leading-relaxed pr-16">{comment.text}</p>
+                  <p className="text-white leading-relaxed pr-16">
+                    {comment.text}
+                  </p>
                   {comment.user.username === session?.user?.username && (
                     <motion.button
                       whileTap={{ scale: 0.95 }}

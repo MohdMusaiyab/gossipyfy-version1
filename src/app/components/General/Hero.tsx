@@ -5,7 +5,7 @@ import React from "react";
 import Image from "next/image";
 
 type HeroProps = {
-  scrollToAbout: () => void; 
+  scrollToAbout: () => void;
 };
 
 const Hero: React.FC<HeroProps> = ({ scrollToAbout }) => {
@@ -48,15 +48,16 @@ const Hero: React.FC<HeroProps> = ({ scrollToAbout }) => {
           >
             <span className="block">Where Stories</span>
             <span
-  className="text-transparent"
-  style={{
-    background: "linear-gradient(to right, #9f7aea, #4c51bf, #4299e1)",
-    backgroundClip: "text",
-    WebkitBackgroundClip: "text", // for better cross-browser support
-  }}
->
-  Turn into Earnings
-</span>
+              className="text-transparent"
+              style={{
+                background:
+                  "linear-gradient(to right, #9f7aea, #4c51bf, #4299e1)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text", // for better cross-browser support
+              }}
+            >
+              Turn into Earnings
+            </span>
           </motion.h1>
 
           <motion.p
@@ -109,11 +110,9 @@ const Hero: React.FC<HeroProps> = ({ scrollToAbout }) => {
             width={500} // Adjust the width as needed
             height={500} // Adjust the height as needed
             className="object-contain mb-10" // Ensures the image scales correctly
-            
           />
         </motion.div>
       </div>
-      
     </section>
   );
 };
