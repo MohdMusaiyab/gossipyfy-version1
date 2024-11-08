@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Language {
+  ENGLISH
+  HINDI
+  BHOJPURI
+  OTHER
+}
+
+enum Category {
+  MUSIC
+  PODCAST
+  CONVERSATION
+  NEWS
+  EDUCATION
+  OTHER
+}
+
+model User {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  username   String      @unique
+  password   String
+  isPremium  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  voiceNotes VoiceNote[]  // A user can have multiple voice notes
+  comments   Comment[]   // A user can have multiple comments
+  likes     Like[]      // A user can have multiple likes
+  
+  // Relations for following and followers
+  following  User[] @relation("UserToFollow")
+  followers  User[] @relation("UserToFollow")
+
+  //For Orders
+  orders     Order[]
+}
+model Order {
+  id                String   @id @default(uuid()) // Unique order ID
+  user              User     @relation(fields: [userId], references: [id]) // Relation to the User model
+  userId            String
+  razorpayOrderId   String   @unique // Razorpay Order ID
+  razorpayPaymentId String?  // Nullable in case of failed payments
+  razorpaySignature String?  // Signature for verification (only after payment)
+  amount            Int      // Amount in paise (for Razorpay)
+  currency          String   // Currency (e.g., INR)
+  status            String   // Order status (e.g., "pending", "paid", "failed")
+  createdAt         DateTime @default(now()) // Timestamp of order creation
+  updatedAt         DateTime @updatedAt       // Timestamp of last update
+  subscriptionExpiry DateTime? // When the subscription will expire (e.g., 1 month from payment)
+}
+
+model VoiceNote {
+  id          String      @id @default(uuid())
+  title       String 
+  fileUrl     String 
+  description String? 
+  isPremium   Boolean  @default(false)
+  language    Language 
+  category    Category 
+  createdAt   DateTime @default(now())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  // Relations
+  comments    Comment[] // One-to-many relation with comments
+  likes       Like[]    // One-to-many relation with likes
+}
+
+model Comment {
+  id          Int       @id @default(autoincrement())
+  text        String    
+  createdAt   DateTime  @default(now()) 
+
+  
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  
+  voiceNoteId String
+  voiceNote   VoiceNote @relation(fields: [voiceNoteId], references: [id])
+}
+
+model Like {
+  id          String       @id @default(uuid())
+  createdAt   DateTime  @default(now()) // Timestamp for when the like was made
+
+  // Foreign key references
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  
+  voiceNoteId String
+  voiceNote   VoiceNote @relation(fields: [voiceNoteId], references: [id])
+}

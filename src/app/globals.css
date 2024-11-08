@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/*Add some marign and padding for the overall application*/
+body {
+  margin: 0;
+  padding: 0;
+}
