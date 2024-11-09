@@ -57,19 +57,20 @@ const ExplorePage = () => {
 
         const queryParams = new URLSearchParams(params);
         const response = await fetch(`/api/note/filters?${queryParams}`);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        
+
         if (data && Array.isArray(data.notes)) {
           setNotes((prevNotes) => {
             if (page === 1) return data.notes;
             const newNotes = data.notes.filter(
               //@ts-ignore
-              (newNote) => !prevNotes.some((prevNote) => prevNote.id === newNote.id)
+              (newNote) =>
+                !prevNotes.some((prevNote) => prevNote.id === newNote.id)
             );
             return [...prevNotes, ...newNotes];
           });
@@ -79,7 +80,6 @@ const ExplorePage = () => {
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch notes");
-        console.error("Error fetching notes:", err);
       } finally {
         setLoading(false);
       }

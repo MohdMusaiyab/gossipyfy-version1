@@ -44,7 +44,6 @@ const UploadModal = () => {
       const res = await axios.post("/api/upload", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log("Upload response:", res.data);
       setSuccess(true);
       setTimeout(() => {
         setIsOpen(false);
@@ -59,7 +58,6 @@ const UploadModal = () => {
       }, 2000);
     } catch (error) {
       setError("Failed to upload. Please try again.");
-      console.error("Error uploading:", error);
     } finally {
       setLoading(false);
     }
@@ -75,7 +73,15 @@ const UploadModal = () => {
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
-      console.log("File selected:", e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      const maxSizeInMB = 100;
+      if (selectedFile.size > maxSizeInMB * 1024 * 1024) {
+        setError(`File size should not exceed ${maxSizeInMB} MB.`);
+        setFile(null); // Reset the file if it exceeds the limit
+      } else {
+        setFile(selectedFile);
+        setError(null); // Clear any previous error if file is valid
+      }
     }
   };
 

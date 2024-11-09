@@ -2,7 +2,7 @@
 import { getSessionOrThrow } from "../../../lib/getSession";
 import prisma from "../../../lib/prisma";
 
-export const toggleLike = async (noteId: string,userId:string) => {
+export const toggleLike = async (noteId: string, userId: string) => {
   try {
     const session = await getSessionOrThrow();
     if (!session) {
@@ -38,7 +38,6 @@ export const toggleLike = async (noteId: string,userId:string) => {
       return { message: "Like added successfully" };
     }
   } catch (err) {
-    console.error(err);
     throw new Error("Failed to toggle like");
   }
 };

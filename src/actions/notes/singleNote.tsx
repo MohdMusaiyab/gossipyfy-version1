@@ -75,7 +75,7 @@ export const singleNote = async (id: string) => {
       followingCount: note.user.following.length,
     };
   } catch (error) {
-    console.error("Error fetching note:", error);
+    
     throw new Error("Failed to fetch note");
   }
 };

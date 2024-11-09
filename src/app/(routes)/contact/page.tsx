@@ -26,8 +26,8 @@ const ContactPage = () => {
     // TODO: Implement actual form submission logic
     try {
       // Example submission (replace with your actual form submission method)
-      console.log("Form submitted:", formData);
-      alert("Message sent successfully!");
+
+      alert("This is currently under development. Please try again later.");
 
       // Reset form after submission
       setFormData({
@@ -36,7 +36,6 @@ const ContactPage = () => {
         message: "",
       });
     } catch (error) {
-      console.error("Submission error:", error);
       alert("Failed to send message. Please try again.");
     }
   };
@@ -66,18 +65,17 @@ const ContactPage = () => {
         />
 
         <div className="relative z-10">
-        <h1
-  style={{
-    background: "linear-gradient(to right, #9F7AEA, #4299E1)", // same gradient as Tailwind
-    backgroundClip: "text", // clips gradient to text
-    WebkitBackgroundClip: "text", // adds Safari compatibility
-    color: "transparent", // makes text transparent to show gradient
-  }}
-  className="text-3xl font-bold text-center mb-6"
->
-  Contact Us
-</h1>
-
+          <h1
+            style={{
+              background: "linear-gradient(to right, #9F7AEA, #4299E1)", // same gradient as Tailwind
+              backgroundClip: "text", // clips gradient to text
+              WebkitBackgroundClip: "text", // adds Safari compatibility
+              color: "transparent", // makes text transparent to show gradient
+            }}
+            className="text-3xl font-bold text-center mb-6"
+          >
+            Contact Us
+          </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Message Textarea */}

@@ -31,7 +31,7 @@ export const addComment = async (
     }); //Create a new comment
     return newComment;
   } catch (err) {
-    console.log(err);
+    
     throw new Error("Failed to add comment");
   }
 };

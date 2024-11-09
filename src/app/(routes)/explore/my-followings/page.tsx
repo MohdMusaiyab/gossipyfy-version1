@@ -19,7 +19,6 @@ const NotesPage = () => {
         setNotes(fetchedNotes);
         setLoading(false);
       } catch (error) {
-        console.error("Failed to fetch notes:", error);
         // @ts-ignore
         setError("Failed to fetch notes");
         setLoading(false);

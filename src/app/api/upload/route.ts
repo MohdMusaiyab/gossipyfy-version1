@@ -47,6 +47,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const MAX_FILE_SIZE = 100 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { message: "File size exceeds the maximum limit of 100 MB" },
+        { status: 413 } // HTTP status code 413 for "Payload Too Large"
+      );
+    }
+
     // Convert the file to a Buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);

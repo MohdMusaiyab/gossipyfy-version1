@@ -17,10 +17,9 @@ export const updatePassword = async (newPassword: string) => {
     },
   });
   if (!existingUser) {
-    console.log("User not found");
     throw new Error("User not found");
   }
-  if (existingUser.id !== currentUserId ) {
+  if (existingUser.id !== currentUserId) {
     throw new Error("Not authenticated to update the password");
   }
   //Updating the password
@@ -34,6 +33,6 @@ export const updatePassword = async (newPassword: string) => {
       password: hashedPassword,
     },
   });
-  console.log("User updated successfully:", updatedUser);
+
   return updatedUser;
 };

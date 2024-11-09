@@ -29,8 +29,16 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "Enter your Email" },
-        password: { label: "Password", type: "password", placeholder: "Enter your Password" },
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "Enter your Email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Enter your Password",
+        },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
@@ -41,12 +49,14 @@ export const authOptions: NextAuthOptions = {
           });
           if (!user) throw new Error("No user found");
 
-          const isValidPassword = await bcrypt.compare(credentials.password, user.password);
+          const isValidPassword = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
           if (!isValidPassword) throw new Error("Invalid password.");
 
           return user;
         } catch (error) {
-          console.error("Error during authorization:", error);
           return null;
         }
       },
@@ -84,22 +94,30 @@ export const authOptions: NextAuthOptions = {
           // @ts-ignore
           where: { email: profile.email },
         });
-    
+
         if (!existingUser) {
           const randomPassword = Math.random().toString(36).slice(-8);
           const hashedPassword = await bcrypt.hash(randomPassword, 10);
-    
+          let username =
+            profile.name || `user_${Math.random().toString(36).slice(2, 8)}`;
+          const usernameExists = await prisma.user.findFirst({
+            where: { username },
+          });
+          if (usernameExists) {
+            // If username exists, append a random string or number to make it unique
+            username = `${username}_${Math.random().toString(36).slice(2, 6)}`;
+          }
           const newUser = await prisma.user.create({
             data: {
               // @ts-ignore
               email: profile.email,
               // @ts-ignore
-              username: profile.name || `user_${Math.random().toString(36).slice(2, 8)}`,
+              username:username,
               isPremium: false,
               password: hashedPassword,
             },
           });
-    
+
           user.id = newUser.id;
           user.username = newUser.username;
           user.email = newUser.email;
@@ -112,7 +130,7 @@ export const authOptions: NextAuthOptions = {
         }
       }
       return true;
-    }    
+    },
   },
   pages: {
     signIn: "/auth/sign-in",

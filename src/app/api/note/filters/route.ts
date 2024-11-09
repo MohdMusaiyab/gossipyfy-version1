@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../../lib/authOptions";
-
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "../../../../../lib/authOptions";
+import { getSessionOrThrow } from "../../../../../lib/getSession";
 export async function GET(req: NextRequest) {
   // Get user session to check the user's premium status
-  
-  const session = await getServerSession(authOptions);
+
+  const session = await getSessionOrThrow();
+  if (!session) {
+    return NextResponse.json({
+      status: 401,
+      success: false,
+      message: "Unauthorized",
+    });
+  }
   const isPremium = session?.user?.isPremium || false;
-  
+
   // Extract search parameters from the request
   const { searchParams } = new URL(req.url);
   const categories =
@@ -21,7 +28,7 @@ export async function GET(req: NextRequest) {
       .get("languages")
       ?.split(",")
       .map((lang) => lang.toUpperCase()) || [];
-  
+
   // Extract search query parameter
   const searchQuery = searchParams.get("search")?.trim() || "";
 
@@ -32,14 +39,14 @@ export async function GET(req: NextRequest) {
 
   try {
     // Create a filter for the query
-    
+
     const filter: any = {};
 
     // Filter by categories, but only if there are valid values
     if (categories.length > 0 && categories[0] !== "") {
       filter.category = { in: categories };
     }
-    
+
     // Filter by languages, but only if there are valid values
     if (languages.length > 0 && languages[0] !== "") {
       filter.language = { in: languages };
@@ -53,8 +60,8 @@ export async function GET(req: NextRequest) {
     // If searchQuery is provided, add it to the filter
     if (searchQuery) {
       filter.OR = [
-        { title: { contains: searchQuery, mode: 'insensitive' } }, // Search in titles
-        { description: { contains: searchQuery, mode: 'insensitive' } } // Search in descriptions
+        { title: { contains: searchQuery, mode: "insensitive" } }, // Search in titles
+        { description: { contains: searchQuery, mode: "insensitive" } }, // Search in descriptions
       ];
     }
 
@@ -91,7 +98,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Return the response with notes and pagination data
-    
+
     return NextResponse.json({
       status: 200,
       success: true,
@@ -103,7 +110,6 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching notes:", error);
     return NextResponse.json({
       status: 500,
       success: false,

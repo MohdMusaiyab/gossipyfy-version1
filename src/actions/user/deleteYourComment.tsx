@@ -5,6 +5,9 @@ import prisma from "../../../lib/prisma";
 export const deleteYourComment = async (commentId: number) => {
   try {
     const session = await getSessionOrThrow();
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
     const comment = await prisma.comment.findUnique({
       where: {
         id: commentId,
@@ -27,7 +30,6 @@ export const deleteYourComment = async (commentId: number) => {
       commentId,
     };
   } catch (error) {
-    console.error(error);
     return {
       message: "An error occurred while deleting the comment",
       success: false,

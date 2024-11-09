@@ -8,7 +8,7 @@ export const toggleFollowers = async (id: string) => {
     if (!session) {
       throw new Error("Please Login");
     }
-    const userId = session.user.id; // The user who is logged in
+    const userId = session.user.id;
     const followedId = id; // The user who is going to be followed/unfollowed
 
     // Check if the user is already following the target person
@@ -45,7 +45,6 @@ export const toggleFollowers = async (id: string) => {
       return { message: "Followed successfully" };
     }
   } catch (error) {
-    console.error("Error toggling follow status:", error);
     throw new Error("Failed to toggle follow status");
   }
 };

@@ -1,8 +1,16 @@
 "use server";
 import prisma from "../../../lib/prisma";
 import { isOwner } from "./isOwner";
-export const updateVoiceNote = async (noteId: string, data: Record<string, unknown>) => {
+import { getSessionOrThrow } from "../../../lib/getSession";
+export const updateVoiceNote = async (
+  noteId: string,
+  data: Record<string, unknown>
+) => {
   try {
+    const session = await getSessionOrThrow();
+    if (!session) {
+      throw new Error("You must be authenticated to perform this action");
+    }
     const isOwnerResult = await isOwner(noteId);
     if (!isOwnerResult) {
       throw new Error("You are not authorized to perform this action");
@@ -27,7 +35,6 @@ export const updateVoiceNote = async (noteId: string, data: Record<string, unkno
 
     return updatedNote;
   } catch (error) {
-    console.log(error);
     throw new Error("Failed to update note");
   }
 };

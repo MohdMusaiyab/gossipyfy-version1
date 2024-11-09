@@ -24,6 +24,6 @@ export const isOwner = async (noteId: string) => {
     //When the user is the owner of the note
     return true;
   } catch (error) {
-    console.log(error);
+    throw new Error("You are not authorized to perform this action");
   }
 };

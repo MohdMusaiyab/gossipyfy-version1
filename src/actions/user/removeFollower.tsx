@@ -6,6 +6,9 @@ export const removeFollower = async (followerId: string) => {
   try {
     // Get the current session of the logged-in user
     const session = await getSessionOrThrow();
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
     // @ts-ignore
     const userId = session.user.id; // The ID of the logged-in user (whose followers list will be updated)
 
@@ -21,7 +24,6 @@ export const removeFollower = async (followerId: string) => {
 
     return { message: "Follower removed successfully" };
   } catch (error) {
-    console.error("Error removing follower:", error);
     throw new Error("Error in removeFollower");
   }
 };

@@ -40,8 +40,6 @@ export const getUser = async (userId: string) => {
 
     return user;
   } catch (error) {
-    console.log(error);
     throw new Error("Could not get user");
   }
 };
-  

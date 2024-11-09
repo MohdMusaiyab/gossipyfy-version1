@@ -4,14 +4,14 @@ import prisma from "../../../lib/prisma";
 import { isOwner } from "./isOwner";
 export const deleteNote = async (noteId: string) => {
   try {
-    const session = getSessionOrThrow();
+    const session = await getSessionOrThrow();
     if (!session) {
       return {
         message: "You are not authorized to perform this action",
         success: false,
       };
     }
-    //Checking the owner
+    //Checking the owner 
     const owner = await isOwner(noteId);
     if (!owner) {
       return {
@@ -46,7 +46,7 @@ export const deleteNote = async (noteId: string) => {
     });
     return { message: "Voice note deleted successfully", success: true };
   } catch (error) {
-    console.log(error);
+    
     throw new Error("Failed to delete note");
   }
 };

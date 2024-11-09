@@ -29,7 +29,6 @@ const Page = () => {
           );
           setIsFollowing(isUserFollowing);
         } catch (err) {
-          console.error("Error fetching user data:", err);
           setError("Could not load user data.");
         } finally {
           setLoading(false);
@@ -58,7 +57,6 @@ const Page = () => {
       //@ts-ignore
       await toggleFollowers(id);
     } catch (err) {
-      console.error("Error toggling follow status", err);
       setError("Failed to update follow status.");
       setIsFollowing((prev) => !prev);
     } finally {

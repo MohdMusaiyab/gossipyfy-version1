@@ -6,7 +6,13 @@ import { isOwner } from "./isOwner";
 export const deleteComments = async (noteId: string, commentId: number) => {
   try {
     const session = await getSessionOrThrow();
-    if (session) {
+    if (!session) {
+      return {
+        message: "You need to be authenticated to perform this action",
+        success: false,
+      };
+    }
+    else {
       const isOwnerOfNote = await isOwner(noteId);
       if (!isOwnerOfNote) {
         return {
@@ -15,7 +21,7 @@ export const deleteComments = async (noteId: string, commentId: number) => {
         };
       }
       //Now delete the comment
-       await prisma.comment.delete({
+      await prisma.comment.delete({
         where: {
           id: commentId,
         },
@@ -26,7 +32,6 @@ export const deleteComments = async (noteId: string, commentId: number) => {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       message: "Error in deleting comment",
       success: false,

@@ -6,7 +6,10 @@ import { getSessionOrThrow } from "../../../lib/getSession";
 export const getMyFollowing = async () => {
   try {
     const session = await getSessionOrThrow();
-    
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
     // Query to get the users the current user is following
     const following = await prisma.user.findMany({
       where: {
@@ -25,7 +28,6 @@ export const getMyFollowing = async () => {
 
     return following;
   } catch (err) {
-    console.error(err);
     throw new Error("Error fetching following users");
   }
 };

@@ -61,7 +61,6 @@ const SingleVoiceNote = ({ noteId }) => {
       setLikeCount((prev) => (hasLiked ? prev - 1 : prev + 1));
       await toggleLike(noteId, session?.user?.id);
     } catch (err) {
-      console.error("Error toggling like", err);
       setError(err.message);
       setHasLiked((prev) => !prev);
       setLikeCount((prev) => (hasLiked ? prev + 1 : prev - 1));
@@ -87,7 +86,6 @@ const SingleVoiceNote = ({ noteId }) => {
       }));
       await toggleFollowers(note.user.id);
     } catch (err) {
-      console.error("Error toggling follow status", err);
       setError(err.message);
       setIsFollowing((prev) => !prev);
     }

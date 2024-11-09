@@ -74,7 +74,6 @@ const Page = () => {
       setShowDeleteModal(false);
       setCommentToDelete(null);
     } catch (error) {
-      console.error("Error deleting comment:", error);
       const notification = document.getElementById("notification");
       //@ts-ignore
 

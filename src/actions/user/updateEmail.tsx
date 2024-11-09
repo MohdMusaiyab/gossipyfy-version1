@@ -6,16 +6,19 @@ export const updateEmail = async (newEmail: string) => {
   try {
     //Get the session, and handle authentication failure in getSessionOrThrow
     const session = await getSessionOrThrow();
-    
-    const id=session?.user?.id;
+    if(!session){
+      throw new Error("Unauthorized");
+    }
+
+    const id = session?.user?.id;
     const existingUser = await prisma.user.findUnique({
       where: {
         id: id,
       },
     });
-    console.log("existingUser", existingUser?.email);
+
     // @ts-ignore
-    console.log("from session ",session.user.email);
+
     if (!existingUser) {
       throw new Error("User not found");
     }
@@ -40,10 +43,9 @@ export const updateEmail = async (newEmail: string) => {
         email: newEmail,
       },
     });
-    console.log("updatedUser at the end", updatedUser.email);
+
     return updatedUser;
   } catch (error) {
-    console.log(error);
     throw new Error("Could not update email");
   }
 };

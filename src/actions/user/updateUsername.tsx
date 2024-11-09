@@ -9,25 +9,21 @@ export const updateUserName = async (newUsername: string) => {
     if (!session) {
       throw new Error("User not authenticated");
     }
-
-    //Getting the current username
-    
     const id = session.user.id;
-
     const existingUser = await prisma.user.findUnique({
       where: {
         id: id,
       },
     });
-    console.log("existingUser", existingUser);
+
     if (!existingUser) {
       throw new Error("User not found");
     }
-    console.log("existingUser.email", existingUser.email);
+
     if (existingUser.id !== id) {
       throw new Error("Not authenticated to update the username");
     }
-    //Checking if the new username is already taken
+
     const existingUserWithNewUsername = await prisma.user.findUnique({
       where: {
         username: newUsername,
@@ -45,10 +41,9 @@ export const updateUserName = async (newUsername: string) => {
         username: newUsername,
       },
     });
-    console.log("User updated successfully:", updatedUser);
+
     return updatedUser;
   } catch (error) {
-    console.log(error);
     throw new Error("Could not update username");
   }
 };

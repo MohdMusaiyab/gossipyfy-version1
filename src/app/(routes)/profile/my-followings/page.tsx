@@ -21,7 +21,7 @@ const FollowingPage = () => {
         setFollowing(result);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching following users:", err);
+        
         setError("Failed to fetch following users");
         setLoading(false);
       }

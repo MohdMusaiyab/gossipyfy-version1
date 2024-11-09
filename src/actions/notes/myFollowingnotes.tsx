@@ -33,7 +33,7 @@ export const myFollowingNotes = async () => {
 
     // Fetch all the notes of the users that the current user is following
   } catch (error) {
-    console.error(error);
+    
     throw new Error("Failed to fetch following notes");
   }
 };
