@@ -46,6 +46,9 @@ model User {
 
   //For Orders
   orders     Order[]
+
+  //For Privacy Policy
+  isPrivacyPolicyAccepted Boolean @default(false)
 }
 model Order {
   id                String   @id @default(uuid()) // Unique order ID
