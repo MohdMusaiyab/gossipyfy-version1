@@ -2,21 +2,26 @@
 
 import React, { useState, useEffect } from "react";
 import { Shield, Lock, Globe, Database, User, FileText } from "lucide-react";
-import { getPrivacyPolicyStatus } from "@/actions/user/getPrivacyPolicyStatus"; // Your API action to get status
+import { useSession, signIn } from "next-auth/react";
+import { getPrivacyPolicyStatus } from "@/actions/user/getPrivacyPolicyStatus";
 import PrivacyFormModal from "@/app/components/PrivacyPolicy/PrivacyForm";
 
 const PrivacyPolicyPage = () => {
-  const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(null);
+  const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState<
+    boolean | null
+  >(null);
+  const { data: session, status } = useSession();
 
-  // Fetch privacy policy status on component mount
   useEffect(() => {
     const fetchPrivacyPolicyStatus = async () => {
-      const status = await getPrivacyPolicyStatus(); // Assume this returns true or false
-      setPrivacyPolicyAccepted(status);
+      if (session) {
+        const status = await getPrivacyPolicyStatus();
+        setPrivacyPolicyAccepted(status);
+      }
     };
 
     fetchPrivacyPolicyStatus();
-  }, []);
+  }, [session]);
 
   const policyItems = [
     {
@@ -45,21 +50,41 @@ const PrivacyPolicyPage = () => {
     },
   ];
 
+  const renderPrivacyFormModal = () => {
+    if (session && privacyPolicyAccepted === false) {
+      return (
+        <div className="flex justify-center items-center mt-2">
+          <PrivacyFormModal />
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderSignInPrompt = () => {
+    if (!session) {
+      return (
+        <div className="flex justify-center items-center mt-2">
+          <button
+            onClick={() => signIn()}
+            className="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg p-2"
+          >
+            Sign In to view and Agree the Privacy Policy
+          </button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div
-      className="min-h-screen bg-gradient-to-br from-[#090919] to-[#161837] 
-                 py-12 px-4 md:px-8 lg:px-16"
-    >
-      <div
-        className="max-w-4xl mx-auto bg-[#1E2133] rounded-2xl 
-                   shadow-2xl p-8 md:p-12 
-                   border border-[#9F7AEA]/20 backdrop-blur-md"
-      >
+    <div className="min-h-screen bg-gradient-to-br from-[#090919] to-[#161837] py-12 px-4 md:px-8 lg:px-16">
+      <div className="max-w-4xl mx-auto bg-[#1E2133] rounded-2xl shadow-2xl p-8 md:p-12 border border-[#9F7AEA]/20 backdrop-blur-md">
         <div className="text-center mb-10">
           <h1
             style={{
-              background: "linear-gradient(to right, #9F7AEA, #4299E1)", // matches Tailwind gradient
-              WebkitBackgroundClip: "text", // ensures gradient applies to text in most browsers
+              background: "linear-gradient(to right, #9F7AEA, #4299E1)",
+              WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
             }}
@@ -67,7 +92,6 @@ const PrivacyPolicyPage = () => {
           >
             Privacy Policy
           </h1>
-
           <p className="text-[#A0AEC0] max-w-2xl mx-auto">
             Last Updated: November 7, 2024
           </p>
@@ -75,10 +99,7 @@ const PrivacyPolicyPage = () => {
 
         <div className="space-y-6">
           <section>
-            <h2
-              className="text-2xl font-semibold mb-4 
-                         text-white flex items-center gap-3"
-            >
+            <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-3">
               <FileText className="w-7 h-7 text-[#9F7AEA]" />
               Introduction
             </h2>
@@ -93,10 +114,7 @@ const PrivacyPolicyPage = () => {
             {policyItems.map((item, index) => (
               <div
                 key={index}
-                className="bg-[#2D3748]/30 p-6 rounded-lg 
-                           border border-[#4299E1]/20 
-                           hover:border-[#9F7AEA]/40 
-                           transition-all duration-300"
+                className="bg-[#2D3748]/30 p-6 rounded-lg border border-[#4299E1]/20 hover:border-[#9F7AEA]/40 transition-all duration-300"
               >
                 <div className="flex items-center mb-4">
                   {item.icon}
@@ -110,10 +128,7 @@ const PrivacyPolicyPage = () => {
           </div>
 
           <section>
-            <h2
-              className="text-2xl font-semibold mb-4 
-                         text-white flex items-center gap-3"
-            >
+            <h2 className="text-2xl font-semibold mb-4 text-white flex items-center gap-3">
               <User className="w-7 h-7 text-[#4299E1]" />
               Your Rights
             </h2>
@@ -144,11 +159,9 @@ const PrivacyPolicyPage = () => {
       </div>
 
       {/* Conditionally render PrivacyFormModal if privacy policy is not accepted */}
-      {privacyPolicyAccepted === false && (
-        <div className="flex justify-center items-center mt-2">
-          <PrivacyFormModal />
-        </div>
-      )}
+      {renderPrivacyFormModal()}
+      {/* Conditionally render Sign-In prompt if user is not logged in */}
+      {renderSignInPrompt()}
     </div>
   );
 };

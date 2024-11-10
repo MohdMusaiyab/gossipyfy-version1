@@ -6,7 +6,7 @@ export const getPrivacyPolicyStatus = async () => {
   try {
     const session = await getSessionOrThrow();
     if (!session) {
-      throw new Error("Session not found");
+      return null;
     }
     const user = await prisma.user.findUnique({
       where: {
@@ -17,7 +17,7 @@ export const getPrivacyPolicyStatus = async () => {
       },
     });
     if (!user) {
-      throw new Error("User not found");
+      return null
     }
 
     return user.isPrivacyPolicyAccepted;

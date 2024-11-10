@@ -44,6 +44,7 @@ export async function POST(request: Request) {
       username,
       password: hashedPassword,
       isPremium: false, // Default value
+      isPrivacyPolicyAccepted: false, // Default value
     },
   });
   return NextResponse.json({ message: "User created.", success: true });
