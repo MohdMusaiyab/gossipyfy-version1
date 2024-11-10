@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import prisma from "../../../../lib/prisma";
 import { authOptions } from "../../../../lib/authOptions";
+import { getPrivacyPolicyStatus } from "@/actions/user/getPrivacyPolicyStatus";
 import mime from "mime-types";
 
 // Configure AWS S3 Client
@@ -22,6 +23,14 @@ export async function POST(req: NextRequest) {
     // Checking if the user is authenticated
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    // Checking if the user has accepted the privacy policy
+    const isPrivacyPolicyAccepted = await getPrivacyPolicyStatus();
+    if (!isPrivacyPolicyAccepted) {
+      return NextResponse.json(
+        { message: "Please accept the privacy policy" },
+        { status: 403 }
+      );
     }
 
     // Extract user ID from the session

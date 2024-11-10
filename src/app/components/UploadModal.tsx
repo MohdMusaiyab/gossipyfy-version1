@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { X, Upload, Loader2 } from "lucide-react";
 import { Category } from "@/types/Categories";
 import { Language } from "@/types/Languages";
+import { getPrivacyPolicyStatus } from "@/actions/user/getPrivacyPolicyStatus"; // Make sure this function returns the user's privacy policy acceptance status
+import PrivacyForm from "./PrivacyPolicy/PrivacyForm";
 
 const UploadModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +27,26 @@ const UploadModal = () => {
 
   const [file, setFile] = useState<File | null>(null);
 
+  // State to track if the user has accepted the privacy policy
+  const [hasAcceptedPrivacyPolicy, setHasAcceptedPrivacyPolicy] = useState<
+    boolean | null
+  >(null);
+
+  // Fetch the privacy policy status when the component is mounted
+  useEffect(() => {
+    const fetchPrivacyPolicyStatus = async () => {
+      try {
+        const status = await getPrivacyPolicyStatus(); // Fetch privacy policy status
+        setHasAcceptedPrivacyPolicy(status);
+      } catch (error) {
+        setError("Failed to fetch privacy policy status.");
+      }
+    };
+
+    fetchPrivacyPolicyStatus();
+  }, []);
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -63,6 +85,7 @@ const UploadModal = () => {
     }
   };
 
+  // Handle form data change
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -70,6 +93,7 @@ const UploadModal = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle file input change
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -102,7 +126,7 @@ const UploadModal = () => {
               className="fixed inset-0 bg-black bg-opacity-70 transition-opacity"
               onClick={() => setIsOpen(false)}
             />
-            <div className="relative bg-gradient-to-br from-[#1e1e2e] to-[#2a2a40] rounded-lg w-full max-w-md p-6 shadow-2xl">
+            <div className="relative mt-10 bg-gradient-to-br from-[#1e1e2e] to-[#2a2a40] rounded-lg w-full max-w-md p-6 shadow-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
                   Upload Note
@@ -114,6 +138,9 @@ const UploadModal = () => {
                   <X className="h-5 w-5 text-gray-300" />
                 </button>
               </div>
+
+              {/* Show Privacy Form if privacy policy not accepted */}
+              {hasAcceptedPrivacyPolicy === false && <PrivacyForm />}
 
               {success ? (
                 <div className="bg-green-50 border border-green-400 rounded-lg p-4 mb-4 text-green-800">
@@ -218,26 +245,20 @@ const UploadModal = () => {
                       id="file"
                       type="file"
                       onChange={handleFile}
-                      required
-                      accept=".mp3, .wav, .ogg, .m4a, .flac, .aac, .aiff, .wma, .alac, .opus" // Common audio file extensions
                       className="w-full px-3 py-2 bg-[#33334d] border border-gray-500 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
+                    {error && <p className="text-red-400 text-sm">{error}</p>}
                   </div>
 
                   <button
                     type="submit"
-                    disabled={loading}
-                    className={`w-full flex items-center justify-center px-4 py-2 rounded-lg text-white font-medium ${
-                      loading
-                        ? "bg-purple-400 cursor-not-allowed"
-                        : "bg-purple-600 hover:bg-purple-700"
-                    } transition-colors`}
+                    disabled={
+                      loading || !file || hasAcceptedPrivacyPolicy === false
+                    }
+                    className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors disabled:opacity-50"
                   >
                     {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Uploading...
-                      </>
+                      <Loader2 className="animate-spin h-5 w-5 mx-auto" />
                     ) : (
                       "Upload"
                     )}
