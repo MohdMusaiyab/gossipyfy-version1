@@ -32,11 +32,14 @@ const Header = () => {
         ${
           hasScrolled
             ? "backdrop-blur-md bg-[#090919]/70 shadow-lg"
-            : "bg-gradient-to-r from-[#090919] to-[#161837]"
+            : "bg-transparent"
         }
       `}
       style={{
         zIndex: 1000,
+        background: hasScrolled
+          ? "linear-gradient(to right, #090919, #161837)"
+          : "linear-gradient(to right, #090919, #161837)",
       }}
     >
       {/* Logo and Name */}
@@ -46,7 +49,6 @@ const Header = () => {
           alt="Logo"
           width={120}
           height={100}
-          
         />
       </Link>
 
@@ -98,8 +100,8 @@ const Header = () => {
             exit={{ opacity: 0, y: -20 }}
             style={{
               background: hasScrolled
-                ? "rgba(9, 9, 25, 0.8)"
-                : "linear-gradient(135deg, #090919, #161837)",
+                ? "linear-gradient(to right, #090919, #161837)"
+                : "linear-gradient(to right, #090919, #161837)",
               backdropFilter: hasScrolled ? "blur(8px)" : "none",
             }}
           >
