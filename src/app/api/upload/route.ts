@@ -40,6 +40,13 @@ export async function POST(req: NextRequest) {
 
     // Get form data
     const data = await req.formData();
+    //Check if the form data is valid
+    if (!data.has("title") || !data.has("description") || !data.has("file")) {
+      return NextResponse.json(
+        { message: "Invalid form data" },
+        { status: 400 }
+      );
+    }
 
     const title = data.get("title") as string;
     const description = data.get("description") as string;

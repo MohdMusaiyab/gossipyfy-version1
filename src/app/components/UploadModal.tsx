@@ -40,12 +40,21 @@ const UploadModal = () => {
         setHasAcceptedPrivacyPolicy(status);
       } catch (error) {
         setError("Failed to fetch privacy policy status.");
+        console.log(error);
       }
     };
 
     fetchPrivacyPolicyStatus();
   }, []);
 
+  // Clear error automatically after 3 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 3000); // Clear error after 3 seconds
+      return () => clearTimeout(timer); // Cleanup timer on component unmount or error change
+    }
+  }, [error]);
+  
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

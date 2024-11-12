@@ -8,7 +8,7 @@ const Footer = () => {
         
         {/* Left: Copyright Section */}
         <div className="text-center md:text-left">
-          <span className="text-lg">&copy; {new Date().getFullYear()} Talkies. All rights reserved.</span>
+          <span className="text-lg">&copy; {new Date().getFullYear()} Gossipyfy. All rights reserved.</span>
         </div>
         
         {/* Center: Navigation Links */}
@@ -22,16 +22,16 @@ const Footer = () => {
         
         {/* Right: Social Media Icons */}
         <div className="flex space-x-4">
-          <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
+          <a href="https://twitter.com/mohd_musaiyab" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
             <FaTwitter size={20} />
           </a>
           <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
             <FaInstagram size={20} />
           </a>
-          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
+          <a href="https://github.com/MohdMusaiyab" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
             <FaGithub size={20} />
           </a>
-          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
+          <a href="https://www.linkedin.com/in/mohd-musaiyab" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition duration-200">
             <FaLinkedinIn size={20} />
           </a>
         </div>
