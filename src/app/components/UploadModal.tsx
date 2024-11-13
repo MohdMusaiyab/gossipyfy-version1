@@ -105,19 +105,22 @@ const UploadModal = () => {
   // Handle file input change
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
       const selectedFile = e.target.files[0];
       const maxSizeInMB = 100;
+      const allowedFileTypes = ['audio/mpeg', 'audio/wav', 'audio/aac', 'audio/flac', 'audio/m4a'];
+  
       if (selectedFile.size > maxSizeInMB * 1024 * 1024) {
         setError(`File size should not exceed ${maxSizeInMB} MB.`);
-        setFile(null); // Reset the file if it exceeds the limit
+        setFile(null); // Reset the file if it exceeds the size limit
+      } else if (!allowedFileTypes.includes(selectedFile.type)) {
+        setError('Only audio files are allowed.');
+        setFile(null); // Reset the file if it's not an audio file
       } else {
         setFile(selectedFile);
         setError(null); // Clear any previous error if file is valid
       }
     }
   };
-
   return (
     <>
       <button
@@ -254,6 +257,7 @@ const UploadModal = () => {
                       id="file"
                       type="file"
                       onChange={handleFile}
+                      accept="audio/*"
                       className="w-full px-3 py-2 bg-[#33334d] border border-gray-500 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                     {error && <p className="text-red-400 text-sm">{error}</p>}

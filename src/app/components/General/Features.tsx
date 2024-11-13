@@ -1,49 +1,55 @@
 "use client";
 
-import { motion } from 'framer-motion';
-import React from 'react';
-import Link from 'next/link'; 
-import { 
-  UserCircle2, 
-  DollarSign, 
-  Layers, 
-  Users, 
-  BarChart3, 
-  Shield 
-} from 'lucide-react';
+import { motion } from "framer-motion";
+import React from "react";
+import Link from "next/link";
+import {
+  UserCircle2,
+  DollarSign,
+  Layers,
+  Users,
+  BarChart3,
+  Shield,
+} from "lucide-react";
 
 const Features = () => {
   const features = [
     {
       title: "Stay Anonymous",
-      description: "Your identity stays private. Share your thoughts without revealing personal details, letting your content speak for itself.",
-      icon: UserCircle2
+      description:
+        "Your identity stays private. Share your thoughts without revealing personal details, letting your content speak for itself.",
+      icon: UserCircle2,
     },
     {
       title: "Share & Earn",
-      description: "Post your content, gain subscribers, and start earning. The more engagement you receive, the more you can monetize.",
-      icon: DollarSign
+      description:
+        "Post your content, gain subscribers, and start earning. The more engagement you receive, the more you can monetize.",
+      icon: DollarSign,
     },
     {
       title: "Subscription Tiers",
-      description: "Enjoy exclusive features and content through our monthly subscription plans. Get more benefits, including analytics, customization, and increased earning potential.",
-      icon: Layers
+      description:
+        "Enjoy exclusive features and content through our monthly subscription plans. Get more benefits, including analytics, customization, and increased earning potential.",
+      icon: Layers,
     },
     {
       title: "Build Your Subscriber Base",
-      description: "Grow your audience by letting users subscribe to your content. Build a community of loyal followers who can support your journey.",
-      icon: Users
+      description:
+        "Grow your audience by letting users subscribe to your content. Build a community of loyal followers who can support your journey.",
+      icon: Users,
     },
     {
       title: "Detailed Analytics",
-      description: "Track your performance with advanced analytics. Understand your audience, and optimize your content strategy to increase engagement.",
-      icon: BarChart3
+      description:
+        "Track your performance with advanced analytics. Understand your audience, and optimize your content strategy to increase engagement.",
+      icon: BarChart3,
     },
     {
       title: "Secure Payments",
-      description: "Earn from your content with our secure and fast payment system. Receive payouts directly to your preferred method.",
-      icon: Shield
-    }
+      description:
+        "Earn from your content with our secure and fast payment system. Receive payouts directly to your preferred method.",
+      icon: Shield,
+    },
   ];
 
   const containerVariants = {
@@ -51,9 +57,9 @@ const Features = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -62,18 +68,18 @@ const Features = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6
-      }
-    }
+        duration: 0.6,
+      },
+    },
   };
 
   return (
     <section className="relative min-h-screen py-20 overflow-hidden">
       {/* Animated background */}
-      <div 
-        className="absolute inset-0" 
+      <div
+        className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, #090919, #161837)',
+          background: "linear-gradient(135deg, #090919, #161837)",
         }}
       >
         <motion.div
@@ -82,7 +88,8 @@ const Features = () => {
           transition={{ duration: 5, repeat: Infinity }}
           className="absolute inset-0"
           style={{
-            backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)'
+            backgroundImage:
+              "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%)",
           }}
         />
       </div>
@@ -97,24 +104,24 @@ const Features = () => {
           <h2 className="text-white text-5xl md:text-7xl font-bold mb-6">
             Why Choose{" "}
             <span
-  className="text-transparent"
-  style={{
-    background: "linear-gradient(to right, #9f7aea, #4c51bf, #4299e1)", // gradient remains the same
-    backgroundClip: "text", // Clips the gradient to the text
-    WebkitBackgroundClip: "text", // Ensures cross-browser compatibility (Safari)
-  }}
->
-  Gossipyfy
-</span>
-
+              className="text-transparent"
+              style={{
+                background:
+                  "linear-gradient(to right, #9f7aea, #4c51bf, #4299e1)", // gradient remains the same
+                backgroundClip: "text", // Clips the gradient to the text
+                WebkitBackgroundClip: "text", // Ensures cross-browser compatibility (Safari)
+              }}
+            >
+              Gossipyfy
+            </span>
           </h2>
           <p className="text-xl text-purple-200/80 max-w-3xl mx-auto">
-            Discover the features that make Gossipyfy the perfect platform for sharing your voice 
-            and building your community.
+            Discover the features that make Gossipyfy the perfect platform for
+            sharing your voice and building your community.
           </p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -128,8 +135,8 @@ const Features = () => {
               className="group relative"
             >
               {/* Glowing background effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur-xl transform group-hover:scale-105 transition-transform duration-500"/>
-              
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur-xl transform group-hover:scale-105 transition-transform duration-500" />
+
               <div className="relative h-full p-8 rounded-xl bg-gray-900/50 backdrop-blur-sm border border-purple-500/10 hover:border-purple-500/30 transition-all duration-500">
                 <div className="flex flex-col h-full">
                   <div className="mb-6">
@@ -137,17 +144,17 @@ const Features = () => {
                       <feature.icon className="w-8 h-8 text-purple-400" />
                     </div>
                     <h3
-  className="text-2xl font-semibold"
-  style={{
-    background: "linear-gradient(to right, #9f7aea, #4c51bf, #4299e1)", // Maintain the same gradient
-    backgroundClip: "text", // Clip the background to the text
-    WebkitBackgroundClip: "text", // Ensure cross-browser compatibility (Safari)
-    color: "transparent", // Make the text transparent to show the gradient
-  }}
->
-  {feature.title}
-</h3>
-
+                      className="text-2xl font-semibold"
+                      style={{
+                        background:
+                          "linear-gradient(to right, #9f7aea, #4c51bf, #4299e1)", // Maintain the same gradient
+                        backgroundClip: "text", // Clip the background to the text
+                        WebkitBackgroundClip: "text", // Ensure cross-browser compatibility (Safari)
+                        color: "transparent", // Make the text transparent to show the gradient
+                      }}
+                    >
+                      {feature.title}
+                    </h3>
                   </div>
                   <p className="text-lg text-purple-200/80 flex-grow">
                     {feature.description}
@@ -166,8 +173,12 @@ const Features = () => {
           className="mt-16 text-center"
         >
           <button className="group px-8 py-4 rounded-full relative overflow-hidden">
-            <Link href="/explore" className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-600 transition-all"></Link>
-            <span className="relative text-white font-semibold">Get Started Now</span>
+            <Link
+              href="/explore"
+              className="text-white p-4 rounded-lg font-semibold relativeinset-0 bg-gradient-to-r from-purple-500 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-600 transition-all"
+            >
+              Get Started Now
+            </Link>
           </button>
         </motion.div>
       </div>

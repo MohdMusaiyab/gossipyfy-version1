@@ -15,6 +15,14 @@ const s3 = new S3Client({
   },
 });
 
+const ALLOWED_FILE_TYPES = [
+  "audio/mpeg",
+  "audio/wav",
+  "audio/aac",
+  "audio/flac",
+  "audio/mp4",
+];
+
 export async function POST(req: NextRequest) {
   try {
     // Get the session
@@ -68,6 +76,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { message: "File size exceeds the maximum limit of 100 MB" },
         { status: 413 } // HTTP status code 413 for "Payload Too Large"
+      );
+    }
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { message: "Supported formats: MP3, WAV, AAC, FLAC, M4A" },
+        { status: 400 }
       );
     }
 
