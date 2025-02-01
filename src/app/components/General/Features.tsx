@@ -1,14 +1,12 @@
 "use client";
-
 import { motion } from "framer-motion";
 import React from "react";
 import Link from "next/link";
 import {
   UserCircle2,
   DollarSign,
-  Layers,
+  Layers, 
   Users,
-  BarChart3,
   Shield,
 } from "lucide-react";
 
@@ -39,10 +37,10 @@ const Features = () => {
       icon: Users,
     },
     {
-      title: "Detailed Analytics",
+      title: "Share Confessions Anonymously",
       description:
-        "Track your performance with advanced analytics. Understand your audience, and optimize your content strategy to increase engagement.",
-      icon: BarChart3,
+        "Express your deepest thoughts and confessions without revealing your identity. Release guilt and stress in a safe and supportive environment.",
+      icon: UserCircle2,
     },
     {
       title: "Secure Payments",

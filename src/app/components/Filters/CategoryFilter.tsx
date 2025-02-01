@@ -1,5 +1,3 @@
-// src/app/explore/CategoryFilter.tsx
-
 import React from 'react';
 
 const CategoryFilter = ({
@@ -9,7 +7,7 @@ const CategoryFilter = ({
   selectedCategories: string[];
   onChange: (categories: string[]) => void;
 }) => {
-  const categories = ['MUSIC', 'PODCAST', 'CONVERSATION', 'NEWS', 'EDUCATION', 'OTHER'];
+  const categories = ['MUSIC', 'PODCAST', 'CONVERSATION', 'NEWS', 'EDUCATION','CONFESSION','OTHER'];
 
   const handleSelect = (category: string) => {
     const updatedCategories = selectedCategories.includes(category)

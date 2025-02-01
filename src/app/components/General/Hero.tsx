@@ -67,7 +67,7 @@ const Hero: React.FC<HeroProps> = ({ scrollToAbout }) => {
             className="text-xl md:text-2xl text-purple-200/80 leading-relaxed"
           >
             Your Voice. Your Story. Your Earnings. Share audio that
-            matters—gossip, music, podcasts, and more—all while staying
+            matters—gossip, music, podcasts, confessions and more—all while staying
             anonymous. Get heard, get paid.
           </motion.p>
 

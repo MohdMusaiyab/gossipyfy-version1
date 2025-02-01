@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "../../../../../lib/authOptions";
 import { getSessionOrThrow } from "../../../../../lib/getSession";
 export async function GET(req: NextRequest) {
   // Get user session to check the user's premium status
