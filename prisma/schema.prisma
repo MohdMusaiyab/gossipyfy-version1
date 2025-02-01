@@ -26,6 +26,7 @@ enum Category {
   CONVERSATION
   NEWS
   EDUCATION
+  CONFESSION
   OTHER
 }
 
