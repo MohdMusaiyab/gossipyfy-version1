@@ -156,6 +156,7 @@ const ExplorePage = () => {
                     {note.description}
                   </p>
                 )}
+                <span className="text-gray-400 text-sm font-bold mt-auto self-end">{note.category}</span>
               </div>
             </Link>
           ))}
@@ -192,4 +193,5 @@ interface VoiceNote {
   user?: {
     username: string;
   };
+  category: string;
 }

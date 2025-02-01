@@ -1,8 +1,9 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { yourUserNotes } from "@/actions/notes/yourUserNotes";
 import Link from "next/link";
-import { Loader2, Music, Volume2, Calendar, Tag, Globe2 } from "lucide-react";
+import { Loader2, Music, Calendar, Tag, Globe2, Filter } from "lucide-react";
+import { Language } from "@/types/Languages";
+import { Category } from "@/types/Categories";
 
 interface Note {
   id: string;
@@ -19,11 +20,15 @@ const YourNotes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const fetchedNotes = await yourUserNotes();
+        setLoading(true);
+        setNotes([]); // Clear existing notes when loading starts
+        const fetchedNotes = await yourUserNotes(selectedCategory as Category, selectedLanguage as Language);
         //@ts-ignore
         setNotes(fetchedNotes.voiceNotes || []);
       } catch (error) {
@@ -34,40 +39,24 @@ const YourNotes = () => {
     };
 
     fetchNotes();
-  }, []);
+  }, [selectedCategory, selectedLanguage]);
 
   const handlePlayPause = (noteId: string) => {
     setCurrentlyPlaying(currentlyPlaying === noteId ? null : noteId);
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg backdrop-blur-sm">
-        <p className="text-center">{error}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="relative">
-      {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-radial from-indigo-500/10 to-transparent rounded-lg" />
 
       <div className="relative text-white container mx-auto mt-6 p-4">
+        {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <Music className="w-8 h-8 text-indigo-400" />
           <h2
             className="text-2xl font-bold"
             style={{
-              background: "linear-gradient(to right, #9f7aea, #4299e1)", // same gradient as from-purple-400 to blue-400
+              background: "linear-gradient(to right, #9f7aea, #4299e1)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
@@ -77,7 +66,86 @@ const YourNotes = () => {
           </h2>
         </div>
 
-        {notes.length === 0 ? (
+        {/* Filters Section */}
+        <div className="mb-8 bg-white/5 rounded-lg p-4 border border-white/10 backdrop-blur-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="w-5 h-5 text-indigo-400" />
+            <h3 className="text-lg font-semibold text-indigo-100">Filters</h3>
+          </div>
+          
+          <div className="flex flex-wrap gap-6">
+            {/* Category Filter */}
+            <div className="flex-1 min-w-[200px]">
+              <label 
+                htmlFor="category" 
+                className="block text-sm font-medium text-indigo-200 mb-2"
+              >
+                Category
+              </label>
+              <select
+                id="category"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full bg-white/10 text-indigo-100 rounded-lg px-3 py-2 
+                         border border-white/20 outline-none transition-all duration-200
+                         hover:border-indigo-400/50 focus:border-indigo-400
+                         focus:ring-2 focus:ring-indigo-400/20
+                         [&>option]:bg-slate-900 [&>option]:text-indigo-100"
+                style={{
+                  backgroundColor: 'rgb(15 23 42)'
+                }}
+              >
+                <option value="">All Categories</option>
+                {Object.values(Category).map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Language Filter */}
+            <div className="flex-1 min-w-[200px]">
+              <label 
+                htmlFor="language" 
+                className="block text-sm font-medium text-indigo-200 mb-2"
+              >
+                Language
+              </label>
+              <select
+                id="language"
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                className="w-full bg-white/10 text-indigo-100 rounded-lg px-3 py-2 
+                         border border-white/20 outline-none transition-all duration-200
+                         hover:border-indigo-400/50 focus:border-indigo-400
+                         focus:ring-2 focus:ring-indigo-400/20
+                         [&>option]:bg-slate-900 [&>option]:text-indigo-100"
+                style={{
+                  backgroundColor: 'rgb(15 23 42)'
+                }}
+              >
+                <option value="">All Languages</option>
+                {Object.values(Language).map((lang) => (
+                  <option key={lang} value={lang}>
+                    {lang}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Section - Only show one of loading, error, or notes */}
+        {loading ? (
+          <div className="flex items-center justify-center min-h-[200px]">
+            <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+          </div>
+        ) : error ? (
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg backdrop-blur-sm">
+            <p className="text-center">{error}</p>
+          </div>
+        ) : notes.length === 0 ? (
           <div className="bg-white/5 border border-white/10 rounded-lg p-8 text-center backdrop-blur-sm">
             <Music className="w-12 h-12 text-indigo-400 mx-auto mb-4" />
             <p className="text-indigo-100">
@@ -98,11 +166,10 @@ const YourNotes = () => {
                     <h3
                       className="text-lg font-bold mb-2"
                       style={{
-                        background:
-                          "linear-gradient(to right, #9f7aea, #4299e1)", // same gradient from purple-400 to blue-400
-                        WebkitBackgroundClip: "text", // Ensures it works on Safari and Chrome
-                        backgroundClip: "text", // Ensures it works on modern browsers
-                        color: "transparent", // Makes the text color transparent to show the gradient
+                        background: "linear-gradient(to right, #9f7aea, #4299e1)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
                       }}
                     >
                       {note.title}
@@ -147,13 +214,6 @@ const YourNotes = () => {
                     Your browser does not support the audio element.
                   </audio>
                 </div>
-
-                {/* Hover effect overlay */}
-                <div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-blue-500/5 
-                              opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                              pointer-events-none rounded-lg"
-                />
               </div>
             ))}
           </div>
