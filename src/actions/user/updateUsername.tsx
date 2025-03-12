@@ -32,6 +32,10 @@ export const updateUserName = async (newUsername: string) => {
     if (existingUserWithNewUsername) {
       throw new Error("Username already taken");
     }
+    //If User is Guest User
+    if (existingUser.email === "guestemail@gmail.com") {
+      throw new Error("Guest User cannot update username");
+    }
     //Updating the username
     const updatedUser = await prisma.user.update({
       where: {

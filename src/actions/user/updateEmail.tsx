@@ -6,7 +6,7 @@ export const updateEmail = async (newEmail: string) => {
   try {
     //Get the session, and handle authentication failure in getSessionOrThrow
     const session = await getSessionOrThrow();
-    if(!session){
+    if (!session) {
       throw new Error("Unauthorized");
     }
 
@@ -16,6 +16,10 @@ export const updateEmail = async (newEmail: string) => {
         id: id,
       },
     });
+    //Checking If the User is Guest Login
+    if (existingUser?.email === "guestemail@gmail.com") {
+      throw new Error("Guest User cannot update email");
+    }
 
     // @ts-ignore
 
@@ -46,6 +50,7 @@ export const updateEmail = async (newEmail: string) => {
 
     return updatedUser;
   } catch (error) {
+    console.log(error);
     throw new Error("Could not update email");
   }
 };

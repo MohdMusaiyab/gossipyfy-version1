@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Mail, User, Lock, ArrowRight, Loader } from "lucide-react";
 import Link from "next/link";
 
@@ -21,7 +21,7 @@ export default function SignUpPage() {
     }
   }, [status, router]);
 
-  const checkPasswordStrength = (password:string) => {
+  const checkPasswordStrength = (password: string) => {
     let strength = 0;
     if (password.length >= 8) strength += 1;
     if (/[A-Z]/.test(password)) strength += 1;
@@ -66,7 +66,19 @@ export default function SignUpPage() {
       setError("An unexpected error occurred.");
     }
   };
+  const handleGuestLogin = async () => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: "guestemail@gmail.com",
+      password: "Guest@123#123",
+    });
 
+    if (result?.error) {
+      setError("Guest login failed. Please try again.");
+    } else {
+      router.push("/explore");
+    }
+  };
   const getStrengthColor = () => {
     if (passwordStrength <= 2) return "bg-red-500";
     if (passwordStrength <= 3) return "bg-yellow-500";
@@ -90,14 +102,15 @@ export default function SignUpPage() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#090919] to-[#161837]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_50%)]" />
-      
+
       <div className="relative flex min-h-screen items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
         <div className="w-full my-20 max-w-md space-y-8 rounded-2xl bg-white/10 p-8 shadow-2xl backdrop-blur-xl">
           <div className="text-center">
             <h1
               className="text-4xl font-bold"
               style={{
-                background: "linear-gradient(to right, #a855f7, #667eea, #4299e1)",
+                background:
+                  "linear-gradient(to right, #a855f7, #667eea, #4299e1)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
@@ -122,7 +135,10 @@ export default function SignUpPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="text-sm font-medium text-gray-300" htmlFor="email">
+              <label
+                className="text-sm font-medium text-gray-300"
+                htmlFor="email"
+              >
                 Email
               </label>
               <div className="relative mt-1">
@@ -140,7 +156,10 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-300" htmlFor="username">
+              <label
+                className="text-sm font-medium text-gray-300"
+                htmlFor="username"
+              >
                 Username
               </label>
               <div className="relative mt-1">
@@ -158,7 +177,10 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-300" htmlFor="password">
+              <label
+                className="text-sm font-medium text-gray-300"
+                htmlFor="password"
+              >
                 Password
               </label>
               <div className="relative mt-1">
@@ -180,7 +202,11 @@ export default function SignUpPage() {
                     <span className="text-sm text-gray-300">
                       Password Strength{" "}
                       <span className="font-medium">
-                        {passwordStrength <= 2 ? "Weak" : passwordStrength <= 3 ? "Medium" : "Strong"}
+                        {passwordStrength <= 2
+                          ? "Weak"
+                          : passwordStrength <= 3
+                          ? "Medium"
+                          : "Strong"}
                       </span>
                     </span>
                   </div>
@@ -192,19 +218,47 @@ export default function SignUpPage() {
                   </div>
 
                   <ul className="mt-2 text-sm text-gray-400">
-                    <li className={`${password.length >= 8 ? "text-green-400" : "text-red-400"}`}>
+                    <li
+                      className={`${
+                        password.length >= 8 ? "text-green-400" : "text-red-400"
+                      }`}
+                    >
                       - At least 8 characters
                     </li>
-                    <li className={`${/[A-Z]/.test(password) ? "text-green-400" : "text-red-400"}`}>
+                    <li
+                      className={`${
+                        /[A-Z]/.test(password)
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
                       - One uppercase letter
                     </li>
-                    <li className={`${/[a-z]/.test(password) ? "text-green-400" : "text-red-400"}`}>
+                    <li
+                      className={`${
+                        /[a-z]/.test(password)
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
                       - One lowercase letter
                     </li>
-                    <li className={`${/[0-9]/.test(password) ? "text-green-400" : "text-red-400"}`}>
+                    <li
+                      className={`${
+                        /[0-9]/.test(password)
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
                       - One number
                     </li>
-                    <li className={`${/[^A-Za-z0-9]/.test(password) ? "text-green-400" : "text-red-400"}`}>
+                    <li
+                      className={`${
+                        /[^A-Za-z0-9]/.test(password)
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
                       - One special character
                     </li>
                   </ul>
@@ -216,7 +270,9 @@ export default function SignUpPage() {
               type="submit"
               disabled={!isFormValid}
               className={`group relative w-full overflow-hidden rounded-lg ${
-                isFormValid ? "bg-gradient-to-r from-purple-500 to-blue-500" : "bg-gray-500"
+                isFormValid
+                  ? "bg-gradient-to-r from-purple-500 to-blue-500"
+                  : "bg-gray-500"
               } p-4 text-white transition-all duration-300 ease-in-out focus:outline-none`}
             >
               <span className="absolute right-5 top-1/2 -translate-y-1/2 transform transition-transform duration-300 group-hover:translate-x-2">
@@ -225,6 +281,26 @@ export default function SignUpPage() {
               Create Account
             </button>
           </form>
+          <div className="relative flex items-center justify-center">
+            <hr className="w-full border-gray-600" />
+            <span className="absolute bg-[#161837] px-4 text-gray-400">or</span>
+          </div>
+          <button
+            onClick={() => signIn("google", { callbackUrl: "/explore" })}
+            className="w-full rounded-lg border border-gray-600 bg-white/5 p-4 text-white transition-all duration-300 hover:bg-white/10"
+          >
+            Sign in with Google
+          </button>
+          <div className="relative flex items-center justify-center">
+            <hr className="w-full border-gray-600" />
+            <span className="absolute bg-[#161837] px-4 text-gray-400">or</span>
+          </div>
+          <button
+            onClick={handleGuestLogin}
+            className="w-full rounded-lg border border-gray-600 bg-white/5 p-4 text-white transition-all duration-300 hover:bg-white/10"
+          >
+            Login as Guest
+          </button>
 
           <p className="mt-8 text-center text-sm text-gray-400">
             Already have an account?{" "}
@@ -232,7 +308,8 @@ export default function SignUpPage() {
               href="/auth/sign-in"
               className="font-medium transition-colors duration-300"
               style={{
-                background: "linear-gradient(to right, #a855f7, #667eea, #4299e1)",
+                background:
+                  "linear-gradient(to right, #a855f7, #667eea, #4299e1)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",

@@ -34,6 +34,20 @@ const SignInPage = () => {
     }
   };
 
+  const handleGuestLogin = async () => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: "guestemail@gmail.com",
+      password: "Guest@123#123",
+    });
+
+    if (result?.error) {
+      setError("Guest login failed. Please try again.");
+    } else {
+      router.push("/explore");
+    }
+  };
+
   const isButtonDisabled = !email || !password;
 
   if (status === "loading") {
@@ -146,10 +160,20 @@ const SignInPage = () => {
           </div>
 
           <button
-            onClick={() => signIn("google", { callbackUrl: "/" })}
+            onClick={() => signIn("google", { callbackUrl: "/explore" })}
             className="w-full rounded-lg border border-gray-600 bg-white/5 p-4 text-white transition-all duration-300 hover:bg-white/10"
           >
             Sign in with Google
+          </button>
+          <div className="relative flex items-center justify-center">
+            <hr className="w-full border-gray-600" />
+            <span className="absolute bg-[#161837] px-4 text-gray-400">or</span>
+          </div>
+          <button
+            onClick={handleGuestLogin}
+            className="w-full rounded-lg border border-gray-600 bg-white/5 p-4 text-white transition-all duration-300 hover:bg-white/10"
+          >
+            Login as Guest
           </button>
 
           <p className="text-center text-gray-400">

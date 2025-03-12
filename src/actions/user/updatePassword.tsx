@@ -22,6 +22,10 @@ export const updatePassword = async (newPassword: string) => {
   if (existingUser.id !== currentUserId) {
     throw new Error("Not authenticated to update the password");
   }
+  //Not Allowing Guest User to Update Password
+  if (existingUser.email === "guestemail@gmail.com") {
+    throw new Error("Guest User cannot update password");
+  }
   //Updating the password
   //Need to update it the same way at the time of sign up
   const hashedPassword = await bcrypt.hash(newPassword, 10);

@@ -39,12 +39,12 @@ const UpdateUserEmailForm: React.FC<Props> = ({ currentEmail }) => {
       {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-radial from-indigo-500/10 to-transparent rounded-lg" />
 
-      <form 
-        onSubmit={handleSubmit} 
+      <form
+        onSubmit={handleSubmit}
         className="relative mt-6 bg-white/5 backdrop-blur-xl p-6 rounded-lg border border-white/10 shadow-xl"
       >
-        <label 
-          htmlFor="email" 
+        <label
+          htmlFor="email"
           className="block text-lg font-semibold text-white mb-2"
         >
           New Email Address
@@ -70,7 +70,7 @@ const UpdateUserEmailForm: React.FC<Props> = ({ currentEmail }) => {
 
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isLoading || session.user.email === "guestemail@gmail.com"}
           className="mt-6 w-full relative group overflow-hidden rounded-lg
                    bg-gradient-to-r from-purple-500 to-blue-500 
                    hover:from-purple-600 hover:to-blue-600
@@ -82,15 +82,19 @@ const UpdateUserEmailForm: React.FC<Props> = ({ currentEmail }) => {
             {isLoading && (
               <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
             )}
-            {isLoading ? 'Updating...' : 'Update Email'}
+            {isLoading ? "Updating..." : "Update Email"}
           </span>
         </button>
 
         {statusMessage && (
-          <div className={`mt-4 p-3 rounded-lg backdrop-blur-sm
-                         ${statusMessage.includes("successfully") 
-                           ? "bg-green-500/10 text-green-400 border border-green-500/20" 
-                           : "bg-red-500/10 text-red-400 border border-red-500/20"}`}>
+          <div
+            className={`mt-4 p-3 rounded-lg backdrop-blur-sm
+                         ${
+                           statusMessage.includes("successfully")
+                             ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                             : "bg-red-500/10 text-red-400 border border-red-500/20"
+                         }`}
+          >
             {statusMessage}
           </div>
         )}

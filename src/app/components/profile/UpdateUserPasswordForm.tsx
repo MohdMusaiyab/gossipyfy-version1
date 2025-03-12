@@ -2,6 +2,7 @@
 import React, { useState, FormEvent } from "react";
 import { updatePassword } from "@/actions/user/updatePassword";
 import { Loader2, Lock, Eye, EyeOff } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const UpdateUserPasswordForm: React.FC = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -9,6 +10,7 @@ const UpdateUserPasswordForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const { data: session, update } = useSession();
 
   const checkPasswordStrength = (password: string) => {
     let strength = 0;
@@ -53,12 +55,12 @@ const UpdateUserPasswordForm: React.FC = () => {
       {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-radial from-indigo-500/10 to-transparent rounded-lg" />
 
-      <form 
-        onSubmit={handleSubmit} 
+      <form
+        onSubmit={handleSubmit}
         className="relative mt-6 bg-white/5 backdrop-blur-xl p-6 rounded-lg border border-white/10 shadow-xl"
       >
-        <label 
-          htmlFor="password" 
+        <label
+          htmlFor="password"
           className="block text-lg font-semibold text-white mb-2"
         >
           New Password
@@ -68,7 +70,7 @@ const UpdateUserPasswordForm: React.FC = () => {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-2">
             <Lock className="h-5 w-5 text-indigo-400" />
           </div>
-          
+
           <input
             type={showPassword ? "text" : "password"}
             id="password"
@@ -81,7 +83,7 @@ const UpdateUserPasswordForm: React.FC = () => {
                      transition duration-200"
             placeholder="Enter new password"
           />
-          
+
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
@@ -102,11 +104,15 @@ const UpdateUserPasswordForm: React.FC = () => {
             <div className="flex justify-between mb-2">
               <span className="text-sm text-indigo-100">Password Strength</span>
               <span className="text-sm text-indigo-100">
-                {passwordStrength <= 2 ? "Weak" : passwordStrength <= 3 ? "Medium" : "Strong"}
+                {passwordStrength <= 2
+                  ? "Weak"
+                  : passwordStrength <= 3
+                  ? "Medium"
+                  : "Strong"}
               </span>
             </div>
             <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-              <div 
+              <div
                 className={`h-full ${getStrengthColor()} transition-all duration-300`}
                 style={{ width: `${(passwordStrength / 5) * 100}%` }}
               />
@@ -121,7 +127,11 @@ const UpdateUserPasswordForm: React.FC = () => {
               <li className={/[0-9]/.test(newPassword) ? "text-green-400" : ""}>
                 • At least one number
               </li>
-              <li className={/[^A-Za-z0-9]/.test(newPassword) ? "text-green-400" : ""}>
+              <li
+                className={
+                  /[^A-Za-z0-9]/.test(newPassword) ? "text-green-400" : ""
+                }
+              >
                 • At least one special character
               </li>
             </ul>
@@ -130,7 +140,11 @@ const UpdateUserPasswordForm: React.FC = () => {
 
         <button
           type="submit"
-          disabled={isLoading || passwordStrength < 3}
+          disabled={
+            isLoading ||
+            passwordStrength < 3 ||
+            session.user.email === "guestemail@gmail.com"
+          }
           className="mt-6 w-full relative group overflow-hidden rounded-lg
                    bg-gradient-to-r from-purple-500 to-blue-500 
                    hover:from-purple-600 hover:to-blue-600
@@ -142,15 +156,19 @@ const UpdateUserPasswordForm: React.FC = () => {
             {isLoading && (
               <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
             )}
-            {isLoading ? 'Updating...' : 'Update Password'}
+            {isLoading ? "Updating..." : "Update Password"}
           </span>
         </button>
 
         {statusMessage && (
-          <div className={`mt-4 p-3 rounded-lg backdrop-blur-sm
-                         ${statusMessage.includes("successfully") 
-                           ? "bg-green-500/10 text-green-400 border border-green-500/20" 
-                           : "bg-red-500/10 text-red-400 border border-red-500/20"}`}>
+          <div
+            className={`mt-4 p-3 rounded-lg backdrop-blur-sm
+                         ${
+                           statusMessage.includes("successfully")
+                             ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                             : "bg-red-500/10 text-red-400 border border-red-500/20"
+                         }`}
+          >
             {statusMessage}
           </div>
         )}
